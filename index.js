@@ -1,7 +1,10 @@
-navigator.mediaDevices.getUserMedia({ video: true, audio: false }, function (stream) {
- 
+var getUserMedia = require('getusermedia')
 
-  var peer = new SimplePeer({
+getUserMedia({ video: true, audio: false }, function (err, stream) {
+  if (err) return console.error(err)
+
+  var Peer = require('simple-peer')
+  var peer = new Peer({
     initiator: location.hash === '#init',
     trickle: false,
     stream: stream
