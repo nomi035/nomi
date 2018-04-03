@@ -1,24 +1,23 @@
 var Peer = require('simple-peer')
- 
-// get video/voice stream
-navigator.getUserMedia({ video: true, audio: true }, gotMedia, function () {})
- 
-function gotMedia (stream) {
-  var peer1 = new Peer({ initiator: true, stream: stream })
-  var peer2 = new Peer()
- 
-  peer1.on('signal', function (data) {
-    peer2.signal(data)
+  var peer = new Peer({
+    initiator: location.hash === '#init',
+    trickle: false,
   })
- 
-  peer2.on('signal', function (data) {
-    peer1.signal(data)
+
+  peer.on('signal', function (data) {
+    document.getElementById('yourId').value = JSON.stringify(data)
   })
- 
-  peer2.on('stream', function (stream) {
-    // got remote video stream, now let's show it in a video tag
-    var video = document.querySelector('video')
-    video.src = window.URL.createObjectURL(stream)
-    video.play()
+
+  document.getElementById('connect').addEventListener('click', function () {
+    var otherId = JSON.parse(document.getElementById('otherId').value)
+    peer.signal(otherId)
   })
-}
+
+  document.getElementById('send').addEventListener('click', function () {
+    var yourMessage = document.getElementById('yourMessage').value
+    peer.send(yourMessage)
+  })
+
+  peer.on('data', function (data) {
+    document.getElementById('messages').textContent += data + '\n'
+  })
