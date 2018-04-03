@@ -2,8 +2,6 @@ var Peer = require('simple-peer')
   var peer = new Peer({
     initiator: location.hash === '#init',
     trickle: false,
-    reconnectTimer: 100,
-    iceTransportPolicy: 'relay',  
   })
 
   peer.on('signal', function (data) {
