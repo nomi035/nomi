@@ -32,7 +32,7 @@ getUserMedia({ video: true, audio: false }, function (err, stream) {
     var video = document.createElement('video')
     document.body.appendChild(video)
 
-    video.src = window.URL.createObjectURL(stream)
+    video.srcObject = stream 
     video.play()
   })
 })
